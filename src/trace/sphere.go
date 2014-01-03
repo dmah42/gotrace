@@ -8,10 +8,11 @@ type Sphere struct {
 	o2w	M44
 	w2o	M44
 	r	float64
+	m	Material
 }
 
 func NewSphere(o2w *M44) *Sphere {
-	return &Sphere{*o2w, *(o2w.inverse()), 1.0}
+	return &Sphere{*o2w, *(o2w.inverse()), 1.0, NewSolidColor(Color{0.0, 1.0, 0.8})}
 }
 
 func solveQuadratic(a, b, c float64) (bool, float64, float64) {
@@ -62,8 +63,8 @@ func (s *Sphere) isLight() bool {
 	return false
 }
 
-func (s *Sphere) color() *Color {
-	return &Color{0.0, 1.0, 0.8}
+func (s *Sphere) material() Material {
+	return s.m
 }
 
 func (s *Sphere) randomPt() *Pt {

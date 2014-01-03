@@ -16,24 +16,26 @@ func primaryRay(x, y float64) *Ray {
 	return NewRay(eyePt, PtDelta(imgPt, eyePt))
 }
 
-func trace(r *Ray, prims []Primitive, d uint32) *Color {
+func trace(r *Ray, prims []Primitive, d uint32) Color {
 	if d == maxDepth {
 		fmt.Printf("  hit maxdepth\n")
-		return &Color{1.0, 1.0, 1.0}
+		return Color{1.0, 1.0, 1.0}
 	}
 
 	minT := r.t1
-	// var hitPrim *Primitive = nil
-	hitColor := background
+	var hitPrim *Primitive = nil
 	for _, p := range prims {
 		// TODO: recurse and return color
 		hit, t := p.Intersect(r)
 		//fmt.Printf("  %v %.2f (%.2f, %.2f]\n", hit, t, r.t0, r.t1)
 		if hit && t < minT && t > r.t0 {
 			minT = t
-	//		hitPrim = &p
-			hitColor = p.color()
+			hitPrim = &p
 		}
+	}
+
+	if hitPrim == nil {
+		return *background
 	}
 
 	// TODO: reflection/refraction
@@ -54,13 +56,13 @@ func trace(r *Ray, prims []Primitive, d uint32) *Color {
 				continue
 			}
 			if hit, _ := p.Intersect(shadowRay); !hit {
-				c.Add(p.color().Mul(l.color()))
+				c.Add(p.material().color().Mul(l.material().color()))
 			}
 		}
 	}
 	return &c
 	*/
-	return hitColor
+	return (*hitPrim).material().color()
 }
 
 func Render(ctx *Context) Image {
@@ -83,7 +85,7 @@ func Render(ctx *Context) Image {
 			ray := NewRay(rayO, rayD)
 
 			c := trace(ray, ctx.primitives, 0)
-			image[y][x].Add(c)
+			image[y][x].Add(&c)
 		}
 	}
 
