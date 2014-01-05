@@ -4,6 +4,11 @@ type Color struct {
 	R, G, B	float64
 }
 
+var (
+	colorBlack = Color{0, 0, 0}
+	colorWhite = Color{1, 1, 1}
+)
+
 func NewColor(r, g, b float64) *Color {
 	return &Color{r, g, b}
 }

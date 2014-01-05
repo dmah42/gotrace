@@ -11,8 +11,8 @@ type Sphere struct {
 	m	Material
 }
 
-func NewSphere(o2w *M44) *Sphere {
-	return &Sphere{*o2w, *(o2w.inverse()), 1.0, NewSolidColor(Color{0.0, 1.0, 0.8})}
+func NewSphere(o2w *M44, m Material) *Sphere {
+	return &Sphere{*o2w, *(o2w.inverse()), 1.0, m}
 }
 
 func solveQuadratic(a, b, c float64) (bool, float64, float64) {
@@ -73,10 +73,6 @@ func (s *Sphere) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	u = phi / (2.0 * math.Pi)
 	v = (math.Pi - theta) / math.Pi
 	return
-}
-
-func (s *Sphere) isLight() bool {
-	return false
 }
 
 func (s *Sphere) material() Material {

@@ -25,30 +25,33 @@ func trace(r *Ray, prims []Primitive, d uint32) Color {
 	minT := r.t1
 	minU := 0.0
 	minV := 0.0
-	var hitPrim *Primitive = nil
-	for _, p := range prims {
-		hit, t, u, v := p.Intersect(r)
+	hitInx := -1
+	for i := range prims {
+		hit, t, u, v := prims[i].Intersect(r)
 		if hit && t < minT && t > r.t0 {
 			minT = t
 			minU = u
 			minV = v
-			hitPrim = &p
+			hitInx = i
 		}
 	}
 
-	if hitPrim == nil {
+	if hitInx == -1 {
 		return *background
 	}
 
+	// fmt.Printf("hit: %+v\n", prims[hitInx])
+
 	// TODO: reflection/refraction
 
-	// TODO: lights
+	// Lights
 	/*
-	hitPt := PtAdd(&r.o, V3Mul(&r.d, mindist))
+	hitPt := PtAdd(&r.o, V3Mul(&r.d, minT))
 
-	c := Color{0.0, 0.0, 0.0}
+	c := colorBlack
 	for _, l := range prims {
-		if !l.isLight() {
+		lm := l.material()
+		if lm.emissive() == colorBlack {
 			continue
 		}
 		lightPt := l.randomPt()
@@ -57,14 +60,18 @@ func trace(r *Ray, prims []Primitive, d uint32) Color {
 			if i == hitInx {
 				continue
 			}
-			if hit, _ := p.Intersect(shadowRay); !hit {
-				c.Add(p.material().color().Mul(l.material().color()))
+			if hit, _, _, _ := p.Intersect(shadowRay); !hit {
+				d := p.material().diffuse(minU, minV)
+				e := lm.emissive()
+				c.Add(d.Mul(&e))
 			}
 		}
 	}
-	return &c
+	return c
 	*/
-	return Color{minU, minV, 0.5} // (*hitPrim).material().color()
+	c := prims[hitInx].material().diffuse(minU, minV)
+	// fmt.Printf("  %v\n", c)
+	return c
 }
 
 func Render(ctx *Context) Image {

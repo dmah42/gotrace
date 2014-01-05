@@ -7,9 +7,12 @@ type Triangle struct {
 	v	[3]V3
 }
 
-func NewTriangle(o2w *M44) *Triangle {
-	return &Triangle{*o2w, *(o2w.inverse()), NewSolidColor(Color{0.0, 1.0, 0.8}),
-			 [3]V3{{-1, -1, 0}, {1, -1, 0}, {0, 1, 0},}}
+var (
+	verts	= [3]V3{{-1, -1, 0}, {1, -1, 0}, {0, 1, 0},}
+)
+
+func NewTriangle(o2w *M44, m Material) *Triangle {
+	return &Triangle{*o2w, *(o2w.inverse()), m, verts}
 }
 
 func (tri *Triangle) Intersect(ray *Ray) (hit bool, t, u, v float64) {
@@ -51,10 +54,6 @@ func (tri *Triangle) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	t = Dot(e2, vq) / det
 	hit = t > r.t0 && t < r.t1
 	return
-}
-
-func (t *Triangle) isLight() bool {
-	return false
 }
 
 func (t *Triangle) material() Material {
