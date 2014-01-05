@@ -12,15 +12,17 @@ type Image [][]Color
 
 const maxColor = 65535
 
-func colorComponentToBytes(c uint16) []byte {
+// Convert a row of uint16s to a byte slice
+func colorToBytes(r [][3]uint16) []byte {
 	buf := new(bytes.Buffer)
-	err := binary.Write(buf, binary.BigEndian, c)
+	err := binary.Write(buf, binary.BigEndian, r)
 	if err != nil {
 		log.Fatal(err)
 	}
 	return buf.Bytes()
 }
 
+// Create an image w x h pixels
 func makeImage(w, h uint32) Image {
 	image := make([][]Color, h)
 	for i := range image {
@@ -33,6 +35,7 @@ func makeImage(w, h uint32) Image {
 }
 
 // TODO: gamma correct
+// Ensure the brightest component of any colour is 1.0
 func normalizeImage(image Image) {
 	// find max
 	max := 0.0
@@ -58,6 +61,7 @@ func normalizeImage(image Image) {
 	}
 }
 
+// Write the given image to a PPM format file of the given name
 func WriteImageToPPM(image Image, name string) {
 	f, err := os.Create(name + ".ppm")
 	if err != nil {
@@ -65,39 +69,33 @@ func WriteImageToPPM(image Image, name string) {
 	}
 	defer f.Close()
 
-	log.Printf("Writing image to %s.ppm\n", name)
+	log.Printf("Normalizing image\n")
 	normalizeImage(image)
 
-	_, err = f.WriteString(fmt.Sprintf("P6 %d %d %d\n", len(image[0]), len(image), maxColor))
-	if err != nil {
-		log.Fatal(err)
-	}
-	for y := range image {
-		for x := range image[y] {
-			n, err := f.Write(colorComponentToBytes(uint16(image[y][x].R * maxColor)))
-			if err != nil {
-				log.Fatal(err)
-			}
-			if n != 2 {
-				log.Fatal(fmt.Sprintf("r != 2 bytes: %.3f", image[y][x].R))
-			}
-			n, err = f.Write(colorComponentToBytes(uint16(image[y][x].G * maxColor)))
-			if err != nil {
-				log.Fatal(err)
-			}
-			if n != 2 {
-				log.Fatal(fmt.Sprintf("g != 2 bytes: %.3f", image[y][x].G))
-			}
-			n, err = f.Write(colorComponentToBytes(uint16(image[y][x].B * maxColor)))
-			if err != nil {
-				log.Fatal(err)
-			}
-			if n != 2 {
-				log.Fatal(fmt.Sprintf("b != 2 bytes: %.3f", image[y][x].B))
-			}
+	log.Printf("Converting image\n")
+	outImage := make([][][3]uint16, len(image))
+	for i := range outImage {
+		outImage[i] = make([][3]uint16, len(image[i]))
+		for j := range outImage[i] {
+			outImage[i][j][0] = uint16(image[i][j].R * maxColor)
+			outImage[i][j][1] = uint16(image[i][j].G * maxColor)
+			outImage[i][j][2] = uint16(image[i][j].B * maxColor)
 		}
 	}
 
+	log.Printf("Writing image to %s.ppm\n", name)
+	_, err = f.WriteString(fmt.Sprintf("P6 %d %d %d\n", len(outImage[0]), len(outImage), maxColor))
+	if err != nil {
+		log.Fatal(err)
+	}
+	for y := range outImage {
+		// Write a row of the image to the file
+		_, err := f.Write(colorToBytes(outImage[y]))
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	log.Println("done")
 }
 
 
