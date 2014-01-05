@@ -14,22 +14,33 @@ func TestNewV3(t *testing.T) {
 func TestDot(t *testing.T) {
 	cases := []struct {
 		lhs, rhs *V3
-		dot float64
+		want float64
 	}{
-		{lhs: NewV3(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), dot: 32.0},
-		{lhs: NewV3(2.0, 4.0, 6.0), rhs: NewV3(-1.0, -0.5, -0.3), dot: -5.8},
+		{lhs: NewV3(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: 32.0},
+		{lhs: NewV3(2.0, 4.0, 6.0), rhs: NewV3(-1.0, -0.5, -0.3), want: -5.8},
 	}
 
 	for _, tt := range cases {
-		gotDot := Dot(tt.lhs, tt.rhs)
-		if tt.dot != gotDot {
-			t.Errorf("want %v, got %v\n", tt.dot, gotDot)
+		got := Dot(tt.lhs, tt.rhs)
+		if tt.want != got {
+			t.Errorf("want %v, got %v\n", tt.want, got)
 		}
 	}
 }
 
 func TestCross(t *testing.T) {
-	// TODO
+	cases := []struct {
+		lhs, rhs, want *V3
+	}{
+		{lhs: NewV3(1, 0, 0), rhs: NewV3(0, 1, 0), want: NewV3(0, 0, 1)},
+	}
+
+	for _, tt := range cases {
+		got := Cross(tt.lhs, tt.rhs)
+		if *tt.want != *got {
+			t.Errorf("want %v, got %v\n", tt.want, got)
+		}
+	}
 }
 
 func TestV3Add(t *testing.T) {

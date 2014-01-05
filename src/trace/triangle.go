@@ -1,9 +1,5 @@
 package trace
 
-import (
-	"math"
-)
-
 type Triangle struct {
 	o2w	M44
 	w2o	M44
@@ -39,7 +35,7 @@ func (tri *Triangle) Intersect(ray *Ray) (bool, float64) {
 	vq := Cross(vt, e1)
 	v := Dot(&r.d, vq) / det
 
-	if v < 0 || v > 1 {
+	if v < 0 || (u+v) > 1 {
 		return false, 0
 	}
 

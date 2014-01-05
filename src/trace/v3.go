@@ -17,7 +17,7 @@ func Dot(lhs, rhs *V3) float64 {
 func Cross(lhs, rhs *V3) *V3 {
 	x := lhs.y*rhs.z - lhs.z*rhs.y
 	y := lhs.z*rhs.x - lhs.x*rhs.z
-	z := rhs.x*rhs.y - lhs.y*rhs.x
+	z := lhs.x*rhs.y - lhs.y*rhs.x
 	return NewV3(x, y, z)
 }
 
