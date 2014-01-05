@@ -23,13 +23,15 @@ func trace(r *Ray, prims []Primitive, d uint32) Color {
 	}
 
 	minT := r.t1
+	minU := 0.0
+	minV := 0.0
 	var hitPrim *Primitive = nil
 	for _, p := range prims {
-		// TODO: recurse and return color
-		hit, t := p.Intersect(r)
-		//fmt.Printf("  %v %.2f (%.2f, %.2f]\n", hit, t, r.t0, r.t1)
+		hit, t, u, v := p.Intersect(r)
 		if hit && t < minT && t > r.t0 {
 			minT = t
+			minU = u
+			minV = v
 			hitPrim = &p
 		}
 	}
@@ -62,11 +64,11 @@ func trace(r *Ray, prims []Primitive, d uint32) Color {
 	}
 	return &c
 	*/
-	return (*hitPrim).material().color()
+	return Color{minU, minV, 0.5} // (*hitPrim).material().color()
 }
 
 func Render(ctx *Context) Image {
-	log.Printf("Rendering...\n")
+	log.Println("Rendering")
 	image := makeImage(ctx.imgW, ctx.imgH)
 
 	rayO := ctx.camera.c2w.transformPt(Origin)
@@ -78,10 +80,10 @@ func Render(ctx *Context) Image {
 			yy := (1.0 - 2.0 * (float64(y) + 0.5) / float64(ctx.imgH)) * ctx.camera.angle
 
 			//fmt.Printf("  %.3f %.3f\n", xx, yy)
-			camPos := ctx.camera.c2w.transformPt(NewPt(xx, yy, -1))
+			//camPos := ctx.camera.c2w.transformPt(NewPt(xx, yy, -1))
 //			fmt.Printf("  %+v\n", camPos)
-			//rayD := c2w.rotateV3(NewV3(xx, yy, -1))
-			rayD := PtDelta(camPos, rayO)
+			//rayD := PtDelta(camPos, rayO)
+			rayD := ctx.camera.c2w.rotateV3(NewV3(xx, yy, -1))
 			ray := NewRay(rayO, rayD)
 
 			c := trace(ray, ctx.primitives, 0)

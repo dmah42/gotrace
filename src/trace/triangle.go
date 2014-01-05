@@ -12,7 +12,7 @@ func NewTriangle(o2w *M44) *Triangle {
 			 [3]V3{{-1, -1, 0}, {1, -1, 0}, {0, 1, 0},}}
 }
 
-func (tri *Triangle) Intersect(ray *Ray) (bool, float64) {
+func (tri *Triangle) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	r := NewRay(tri.w2o.transformPt(&ray.o), tri.w2o.rotateV3(&ray.d))
 	r.t0 = ray.t0
 	r.t1 = ray.t1
@@ -22,25 +22,35 @@ func (tri *Triangle) Intersect(ray *Ray) (bool, float64) {
 	vp := Cross(&r.d, e2)
 
 	det := Dot(e1, vp)
-	if det == 0 {
-		return false, 0
+
+	hit = det != 0
+	t = 0
+	u = 0
+	v = 0
+
+	if !hit {
+		return
 	}
 
 	vt := V3Sub(PtDelta(&r.o, Origin), &tri.v[0])
-	u := Dot(vt, vp) / det
-	if u < 0 || u > 1 {
-		return false, 0
+	u = Dot(vt, vp) / det
+
+	hit = u >= 0 && u <= 1
+	if !hit {
+		return
 	}
 
 	vq := Cross(vt, e1)
-	v := Dot(&r.d, vq) / det
+	v = Dot(&r.d, vq) / det
 
-	if v < 0 || (u+v) > 1 {
-		return false, 0
+	hit = v >= 0 && (u+v) <= 1
+	if !hit {
+		return
 	}
 
-	t := Dot(e2, vq) / det
-	return t > r.t0 && t < r.t1, t
+	t = Dot(e2, vq) / det
+	hit = t > r.t0 && t < r.t1
+	return
 }
 
 func (t *Triangle) isLight() bool {

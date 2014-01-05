@@ -36,7 +36,7 @@ func solveQuadratic(a, b, c float64) (bool, float64, float64) {
 	return true, t0, t1
 }
 
-func (s *Sphere) Intersect(ray *Ray) (bool, float64) {
+func (s *Sphere) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	// Compute A, B and C coefficients
 	r := NewRay(s.w2o.transformPt(&ray.o), s.w2o.rotateV3(&ray.d))
 	r.t0 = ray.t0
@@ -48,15 +48,31 @@ func (s *Sphere) Intersect(ray *Ray) (bool, float64) {
 	c := Dot(l, l) - (s.r*s.r)
 
 	sol, t0, t1 := solveQuadratic(a, b, c)
-	if !sol || t1 < 0 {
-		return false, 0.0
+	hit = sol && t1 >= 0
+	t = t0
+	u = 0
+	v = 0
+
+	if !hit {
+		return
 	}
 
 	// if t0 is less than zero, the intersection point is at t1
-	if t0 < 0 {
-		return true, t1
+	if t < 0 {
+		t = t1
 	}
-	return true, t0
+
+	iPt := PtAdd(&r.o, V3Mul(&r.d, t))
+	theta := math.Acos(-iPt.y)
+	phi := math.Atan2(iPt.z, -iPt.x)
+
+	for phi < 0 {
+		phi = phi + 2.0 * math.Pi;
+	}
+
+	u = phi / (2.0 * math.Pi)
+	v = (math.Pi - theta) / math.Pi
+	return
 }
 
 func (s *Sphere) isLight() bool {
@@ -68,5 +84,6 @@ func (s *Sphere) material() Material {
 }
 
 func (s *Sphere) randomPt() *Pt {
-	return Origin
+	// TODO: pick a point on the surface
+	return s.w2o.transformPt(Origin)
 }

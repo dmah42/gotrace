@@ -95,7 +95,6 @@ func WriteImageToPPM(image Image, name string) {
 			log.Fatal(err)
 		}
 	}
-	log.Println("done")
 }
 
 
