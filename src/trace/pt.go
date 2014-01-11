@@ -18,6 +18,10 @@ func PtSub(p *Pt, v *V3) *Pt {
 	return NewPt(p.x-v.x, p.y-v.y, p.z-v.z)
 }
 
+func PtScale(p *Pt, f float64) *Pt {
+	return NewPt(p.x*f, p.y*f, p.z*f)
+}
+
 func PtDelta(lhs, rhs *Pt) *V3 {
 	return NewV3(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z)
 }

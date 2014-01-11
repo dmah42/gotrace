@@ -45,6 +45,23 @@ func TestPtSub(t *testing.T) {
 	}
 }
 
+func TestPtScale(t *testing.T) {
+	cases := []struct {
+		lhs *Pt
+		f float64
+		want Pt
+	}{
+		{lhs: NewPt(1.0, 2.0, 3.0), f: 0.5, want: Pt{0.5, 1.0, 1.5}},
+	}
+
+	for _, tt := range cases {
+		got := PtScale(tt.lhs, tt.f)
+		if tt.want != *got {
+			t.Errorf("want %v, got %v\n", tt.want, *got)
+		}
+	}
+}
+
 func TestPtDelta(t *testing.T) {
 	cases := []struct {
 		lhs, rhs *Pt
