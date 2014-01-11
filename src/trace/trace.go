@@ -55,7 +55,7 @@ func trace(r *Ray, prims []Primitive, d uint32) Color {
 	// TODO: reflection/refraction
 	// TODO: lights
 
-	c := prims[hitInx].material().diffuse(minU, minV)
+	c := Color{minU, minV, 0.5}//prims[hitInx].material().diffuse(minU, minV)
 	// fmt.Printf("  %v\n", c)
 	return c
 }
