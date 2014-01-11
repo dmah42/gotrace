@@ -6,10 +6,10 @@ type Ray struct {
 	o Pt
 	d V3
 
-	t0, t1	float64
+	t0, t1 float64
 }
 
 func NewRay(o *Pt, d *V3) *Ray {
-	r := &Ray{ *o, *(d.Norm()), 0, infinity }
+	r := &Ray{*o, *(d.Norm()), 0, infinity}
 	return r
 }

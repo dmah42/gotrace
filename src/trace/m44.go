@@ -7,14 +7,14 @@ import (
 var identity = NewM44()
 
 type M44 struct {
-	m	[4][4]float64
+	m [4][4]float64
 }
 
 func NewM44() *M44 {
 	return &M44{[4][4]float64{{1.0, 0.0, 0.0, 0.0},
-				  {0.0, 1.0, 0.0, 0.0},
-				  {0.0, 0.0, 1.0, 0.0},
-				  {0.0, 0.0, 0.0, 1.0},}}
+		{0.0, 1.0, 0.0, 0.0},
+		{0.0, 0.0, 1.0, 0.0},
+		{0.0, 0.0, 0.0, 1.0}}}
 }
 
 func (m *M44) inverse() *M44 {
@@ -56,8 +56,8 @@ func (m *M44) inverse() *M44 {
 		for j := i + 1; j < 4; j++ {
 			f := t.m[j][i] / t.m[i][i]
 			for k := 0; k < 4; k++ {
-				t.m[j][k] = t.m[j][k] - f * t.m[i][k]
-				s.m[j][k] = s.m[j][k] - f * s.m[i][k]
+				t.m[j][k] = t.m[j][k] - f*t.m[i][k]
+				s.m[j][k] = s.m[j][k] - f*s.m[i][k]
 			}
 		}
 	}
@@ -79,8 +79,8 @@ func (m *M44) inverse() *M44 {
 			f = t.m[j][i]
 
 			for k := 0; k < 4; k++ {
-				t.m[j][k] = t.m[j][k] - f * t.m[i][k]
-				s.m[j][k] = s.m[j][k] - f * s.m[i][k]
+				t.m[j][k] = t.m[j][k] - f*t.m[i][k]
+				s.m[j][k] = s.m[j][k] - f*s.m[i][k]
 			}
 		}
 	}
@@ -89,19 +89,19 @@ func (m *M44) inverse() *M44 {
 }
 
 func (m *M44) transformPt(p *Pt) *Pt {
-	x := p.x * m.m[0][0] + p.y * m.m[1][0] + p.z * m.m[2][0] + m.m[3][0];
-	y := p.x * m.m[0][1] + p.y * m.m[1][1] + p.z * m.m[2][1] + m.m[3][1];
-	z := p.x * m.m[0][2] + p.y * m.m[1][2] + p.z * m.m[2][2] + m.m[3][2];
-	w := p.x * m.m[0][3] + p.y * m.m[1][3] + p.z * m.m[2][3] + m.m[3][3];
+	x := p.x*m.m[0][0] + p.y*m.m[1][0] + p.z*m.m[2][0] + m.m[3][0]
+	y := p.x*m.m[0][1] + p.y*m.m[1][1] + p.z*m.m[2][1] + m.m[3][1]
+	z := p.x*m.m[0][2] + p.y*m.m[1][2] + p.z*m.m[2][2] + m.m[3][2]
+	w := p.x*m.m[0][3] + p.y*m.m[1][3] + p.z*m.m[2][3] + m.m[3][3]
 
-	pt := NewPt(x / w, y / w, z / w)
+	pt := NewPt(x/w, y/w, z/w)
 	return pt
 }
 
 func (m *M44) rotateV3(v *V3) *V3 {
-	x := v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0];
-	y := v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1];
-	z := v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2];
+	x := v.x*m.m[0][0] + v.y*m.m[1][0] + v.z*m.m[2][0]
+	y := v.x*m.m[0][1] + v.y*m.m[1][1] + v.z*m.m[2][1]
+	z := v.x*m.m[0][2] + v.y*m.m[1][2] + v.z*m.m[2][2]
 
 	return NewV3(x, y, z)
 }

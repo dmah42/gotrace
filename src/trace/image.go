@@ -96,5 +96,3 @@ func WriteImageToPPM(image Image, name string) {
 		}
 	}
 }
-
-

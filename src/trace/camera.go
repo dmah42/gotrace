@@ -3,10 +3,10 @@ package trace
 import "math"
 
 type Camera struct {
-	c2w	M44
-	w2c	M44
-	focal	float64
-	angle	float64
+	c2w   M44
+	w2c   M44
+	focal float64
+	angle float64
 }
 
 func NewCamera(focal float64, position V3) *Camera {

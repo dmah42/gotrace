@@ -5,10 +5,10 @@ import (
 )
 
 type Sphere struct {
-	o2w	M44
-	w2o	M44
-	r	float64
-	m	Material
+	o2w M44
+	w2o M44
+	r   float64
+	m   Material
 }
 
 func NewSphere(o2w *M44, m Material) *Sphere {
@@ -16,7 +16,7 @@ func NewSphere(o2w *M44, m Material) *Sphere {
 }
 
 func solveQuadratic(a, b, c float64) (bool, float64, float64) {
-	disc := b * b - 4 * a * c
+	disc := b*b - 4*a*c
 	if disc < 0.0 {
 		return false, 0.0, 0.0
 	}
@@ -45,7 +45,7 @@ func (s *Sphere) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	a := Dot(&r.d, &r.d)
 	l := PtDelta(&r.o, Origin)
 	b := 2 * Dot(&r.d, l)
-	c := Dot(l, l) - (s.r*s.r)
+	c := Dot(l, l) - (s.r * s.r)
 
 	sol, t0, t1 := solveQuadratic(a, b, c)
 	hit = sol && t1 >= 0
@@ -67,7 +67,7 @@ func (s *Sphere) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	phi := math.Atan2(iPt.z, -iPt.x)
 
 	for phi < 0 {
-		phi = phi + 2.0 * math.Pi;
+		phi = phi + 2.0*math.Pi
 	}
 
 	u = phi / (2.0 * math.Pi)

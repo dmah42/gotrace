@@ -7,14 +7,15 @@ import (
 )
 
 type stats struct {
-	primaryRay, rayObjectTest, rayObjectIsect	uint64
+	primaryRay, rayObjectTest, rayObjectIsect uint64
 }
 
 const maxDepth = 3
+
 var (
-	background = NewColor(1, 0, 1)
+	background  = NewColor(1, 0, 1)
 	renderStats = stats{0, 0, 0}
-	renderTime time.Duration
+	renderTime  time.Duration
 )
 
 // x and y are coordinates on the image plane
@@ -69,12 +70,12 @@ func Render(ctx *Context) Image {
 	for y := range image {
 		for x := range image[y] {
 			// convert to screen space
-			xx := (2.0 * (float64(x) + 0.5) / float64(ctx.imgW) - 1.0) * ctx.camera.angle * ctx.aspectRatio
-			yy := (1.0 - 2.0 * (float64(y) + 0.5) / float64(ctx.imgH)) * ctx.camera.angle
+			xx := (2.0*(float64(x)+0.5)/float64(ctx.imgW) - 1.0) * ctx.camera.angle * ctx.aspectRatio
+			yy := (1.0 - 2.0*(float64(y)+0.5)/float64(ctx.imgH)) * ctx.camera.angle
 
 			//fmt.Printf("  %.3f %.3f\n", xx, yy)
 			//camPos := ctx.camera.c2w.transformPt(NewPt(xx, yy, -1))
-//			fmt.Printf("  %+v\n", camPos)
+			//			fmt.Printf("  %+v\n", camPos)
 			//rayD := PtDelta(camPos, rayO)
 			rayD := ctx.camera.c2w.rotateV3(NewV3(xx, yy, -1))
 			ray := NewRay(rayO, rayD)

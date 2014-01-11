@@ -14,7 +14,7 @@ func TestNewV3(t *testing.T) {
 func TestDot(t *testing.T) {
 	cases := []struct {
 		lhs, rhs *V3
-		want float64
+		want     float64
 	}{
 		{lhs: NewV3(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: 32.0},
 		{lhs: NewV3(2.0, 4.0, 6.0), rhs: NewV3(-1.0, -0.5, -0.3), want: -5.8},
@@ -46,7 +46,7 @@ func TestCross(t *testing.T) {
 func TestV3Add(t *testing.T) {
 	cases := []struct {
 		lhs, rhs *V3
-		want V3
+		want     V3
 	}{
 		{lhs: NewV3(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: V3{5.0, 7.0, 9.0}},
 	}
@@ -62,7 +62,7 @@ func TestV3Add(t *testing.T) {
 func TestV3Sub(t *testing.T) {
 	cases := []struct {
 		lhs, rhs *V3
-		want V3
+		want     V3
 	}{
 		{lhs: NewV3(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: V3{-3.0, -3.0, -3.0}},
 	}
@@ -77,8 +77,8 @@ func TestV3Sub(t *testing.T) {
 
 func TestV3Mul(t *testing.T) {
 	cases := []struct {
-		v *V3
-		s float64
+		v    *V3
+		s    float64
 		want V3
 	}{
 		{v: NewV3(1.0, 2.0, 3.0), s: 0.5, want: V3{0.5, 1.0, 1.5}},
@@ -94,7 +94,7 @@ func TestV3Mul(t *testing.T) {
 
 func TestLenSqr(t *testing.T) {
 	cases := []struct {
-		v *V3
+		v    *V3
 		want float64
 	}{
 		{v: NewV3(1.0, 2.0, 3.0), want: 14.0},
@@ -111,10 +111,10 @@ func TestLenSqr(t *testing.T) {
 
 func TestNorm(t *testing.T) {
 	cases := []struct {
-		v *V3
+		v    *V3
 		want V3
 	}{
-		{v: NewV3(2.0, 3.0, 6.0), want: V3{2.0/7.0, 3.0/7.0, 6.0/7.0}},
+		{v: NewV3(2.0, 3.0, 6.0), want: V3{2.0 / 7.0, 3.0 / 7.0, 6.0 / 7.0}},
 	}
 
 	for _, tt := range cases {
@@ -124,4 +124,3 @@ func TestNorm(t *testing.T) {
 		}
 	}
 }
-

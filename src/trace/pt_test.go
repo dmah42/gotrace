@@ -13,8 +13,8 @@ func TestNewPt(t *testing.T) {
 
 func TestPtAdd(t *testing.T) {
 	cases := []struct {
-		lhs *Pt
-		rhs *V3
+		lhs  *Pt
+		rhs  *V3
 		want Pt
 	}{
 		{lhs: NewPt(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: Pt{5.0, 7.0, 9.0}},
@@ -30,8 +30,8 @@ func TestPtAdd(t *testing.T) {
 
 func TestPtSub(t *testing.T) {
 	cases := []struct {
-		lhs *Pt
-		rhs *V3
+		lhs  *Pt
+		rhs  *V3
 		want Pt
 	}{
 		{lhs: NewPt(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: Pt{-3.0, -3.0, -3.0}},
@@ -48,7 +48,7 @@ func TestPtSub(t *testing.T) {
 func TestPtDelta(t *testing.T) {
 	cases := []struct {
 		lhs, rhs *Pt
-		want V3
+		want     V3
 	}{
 		{lhs: NewPt(1.0, 2.0, 3.0), rhs: NewPt(4.0, 5.0, 6.0), want: V3{-3.0, -3.0, -3.0}},
 	}
@@ -60,4 +60,3 @@ func TestPtDelta(t *testing.T) {
 		}
 	}
 }
-

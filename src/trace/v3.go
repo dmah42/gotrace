@@ -48,4 +48,3 @@ func (v *V3) Norm() *V3 {
 	}
 	return NewV3(v.x, v.y, v.z)
 }
-

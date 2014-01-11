@@ -1,7 +1,7 @@
 package trace
 
 type Color struct {
-	R, G, B	float64
+	R, G, B float64
 }
 
 var (

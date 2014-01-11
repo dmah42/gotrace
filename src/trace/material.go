@@ -2,13 +2,13 @@ package trace
 
 type Material interface {
 	// TODO reflect, refract?
-	emissive()		Color
-	diffuse(u, v float64)	Color
+	emissive() Color
+	diffuse(u, v float64) Color
 }
 
 // SolidColor
 type SolidColor struct {
-	c	Color
+	c Color
 }
 
 func NewSolidColor(c Color) *SolidColor {
@@ -25,7 +25,7 @@ func (m *SolidColor) diffuse(u, v float64) Color {
 
 // Light
 type Light struct {
-	c	Color
+	c Color
 }
 
 func NewLight(c Color) *Light {

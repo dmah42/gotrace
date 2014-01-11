@@ -1,14 +1,14 @@
 package trace
 
 type Triangle struct {
-	o2w	M44
-	w2o	M44
-	m	Material
-	v	[3]V3
+	o2w M44
+	w2o M44
+	m   Material
+	v   [3]V3
 }
 
 var (
-	verts	= [3]V3{{-1, -1, 0}, {1, -1, 0}, {0, 1, 0},}
+	verts = [3]V3{{-1, -1, 0}, {1, -1, 0}, {0, 1, 0}}
 )
 
 func NewTriangle(o2w *M44, m Material) *Triangle {
