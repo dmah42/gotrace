@@ -4,4 +4,4 @@ export GOPATH=`pwd`
 
 go test trace && \
   go install trace && \
-  go build main
+  go build testbed
