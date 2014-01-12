@@ -1,9 +1,9 @@
 package main
 
 import (
+	"flag"
+	"log"
 	"math"
-	"os"
-	"strconv"
 	"trace"
 )
 
@@ -11,6 +11,10 @@ var (
 	sphereColor   = trace.Color{0, 1, 0.8}
 	triangleColor = trace.Color{0.8, 1, 0}
 	lightColor    = trace.Color{1, 1, 1}
+
+	scene = flag.String("scene", "polysphere", "The scene to render: teapot, polysphere, primitives")
+	width = flag.Uint("width", 400, "The width of the image to render")
+	height = flag.Uint("height", 300, "The height of the image to render")
 )
 
 func polySphere(radius float64, divs uint32, o2w *trace.M44, material trace.Material) *trace.PolyMesh {
@@ -101,21 +105,25 @@ func polySphere(radius float64, divs uint32, o2w *trace.M44, material trace.Mate
 }
 
 func main() {
-	imageW, _ := strconv.ParseUint(os.Args[1], 0, 32)
-	imageH, _ := strconv.ParseUint(os.Args[2], 0, 32)
+	flag.Parse()
 
-	c := trace.NewContext(uint32(imageW), uint32(imageH))
+	c := trace.NewContext(*width, *height)
 
-	// TODO: flag to choose test scene
 	o2w := trace.NewM44()
 	o2w.Translate(trace.NewV3(0, 0, -5))
-	//c.AddPrimitive(polySphere(2, 10, o2w, trace.NewSolidColor(sphereColor)))
-	c.AddPrimitive(trace.NewBezier(o2w, trace.NewSolidColor(sphereColor), teapotVerts, teapotPatches))
 
-	/*
-		o2w := trace.NewM44()
+	m := trace.NewSolidColor(sphereColor)
+
+	switch (*scene) {
+	case "teapot":
+		c.AddPrimitive(trace.NewBezier(o2w, m, teapotVerts, teapotPatches))
+
+	case "polysphere":
+		c.AddPrimitive(polySphere(2, 10, o2w, m))
+
+	case "primitives":
 		o2w.Translate(trace.NewV3(-2, 0, -5))
-		c.AddPrimitive(trace.NewSphere(o2w, trace.NewSolidColor(sphereColor)))
+		c.AddPrimitive(trace.NewSphere(o2w, m))
 
 		o2w = trace.NewM44()
 		o2w.Translate(trace.NewV3(0, 0, -2)).Scale(trace.NewV3(0.2, 0.2, 0.2))
@@ -124,7 +132,11 @@ func main() {
 		o2w = trace.NewM44()
 		o2w.Translate(trace.NewV3(2, 0, -5))
 		c.AddPrimitive(trace.NewTriangle(o2w, trace.NewSolidColor(triangleColor)))
-	*/
+
+	default:
+		log.Fatalf("Unknown scene %q\n", *scene)
+	}
+
 	image := trace.Render(c)
 	trace.WriteImageToPPM(image, "render")
 }

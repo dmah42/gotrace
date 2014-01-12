@@ -23,7 +23,7 @@ func colorToBytes(r [][3]uint16) []byte {
 }
 
 // Create an image w x h pixels
-func makeImage(w, h uint32) Image {
+func makeImage(w, h uint) Image {
 	image := make([][]Color, h)
 	for i := range image {
 		image[i] = make([]Color, w)

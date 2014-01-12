@@ -1,7 +1,7 @@
 package trace
 
 type Context struct {
-	imgW, imgH uint32
+	imgW, imgH uint
 	background Color
 	camera     Camera
 	primitives []Primitive
@@ -9,7 +9,7 @@ type Context struct {
 	aspectRatio float64
 }
 
-func NewContext(w, h uint32) *Context {
+func NewContext(w, h uint) *Context {
 	c := &Context{imgW: w, imgH: h,
 		background: Color{1, 0, 1},
 		camera:     *NewCamera(30.0, V3{0, 0, 5}),
