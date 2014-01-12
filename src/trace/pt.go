@@ -25,3 +25,7 @@ func PtScale(p *Pt, f float64) *Pt {
 func PtDelta(lhs, rhs *Pt) *V3 {
 	return NewV3(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z)
 }
+
+func (p *Pt) ToV3() *V3 {
+	return PtDelta(p, Origin)
+}

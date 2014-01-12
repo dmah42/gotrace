@@ -106,9 +106,11 @@ func main() {
 
 	c := trace.NewContext(uint32(imageW), uint32(imageH))
 
+	// TODO: flag to choose test scene
 	o2w := trace.NewM44()
 	o2w.Translate(trace.NewV3(0, 0, -5))
-	c.AddPrimitive(polySphere(2, 10, o2w, trace.NewSolidColor(sphereColor)))
+	//c.AddPrimitive(polySphere(2, 10, o2w, trace.NewSolidColor(sphereColor)))
+	c.AddPrimitive(trace.NewBezier(o2w, trace.NewSolidColor(sphereColor), teapotVerts, teapotPatches))
 
 	/*
 		o2w := trace.NewM44()

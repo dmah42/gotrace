@@ -69,6 +69,7 @@ func Render(ctx *Context) Image {
 	// TODO: multithread this - tiles?
 	for y := range image {
 		for x := range image[y] {
+			fmt.Printf("%d / %d  ..  %d / %d\r", y, len(image), x, len(image[y]))
 			// convert to screen space
 			xx := (2.0*(float64(x)+0.5)/float64(ctx.imgW) - 1.0) * ctx.camera.angle * ctx.aspectRatio
 			yy := (1.0 - 2.0*(float64(y)+0.5)/float64(ctx.imgH)) * ctx.camera.angle
@@ -86,6 +87,7 @@ func Render(ctx *Context) Image {
 		}
 	}
 	renderTime = time.Since(startTime)
+	fmt.Printf("\n");
 	log.Printf("Stats: %+v\n", renderStats)
 	log.Printf("Time: %s\n", renderTime)
 	return image
