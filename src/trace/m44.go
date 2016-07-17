@@ -89,33 +89,33 @@ func (m *M44) inverse() *M44 {
 }
 
 func (m *M44) transformPt(p *Pt) *Pt {
-	x := p.x*m.m[0][0] + p.y*m.m[1][0] + p.z*m.m[2][0] + m.m[3][0]
-	y := p.x*m.m[0][1] + p.y*m.m[1][1] + p.z*m.m[2][1] + m.m[3][1]
-	z := p.x*m.m[0][2] + p.y*m.m[1][2] + p.z*m.m[2][2] + m.m[3][2]
-	w := p.x*m.m[0][3] + p.y*m.m[1][3] + p.z*m.m[2][3] + m.m[3][3]
+	x := p.X*m.m[0][0] + p.Y*m.m[1][0] + p.Z*m.m[2][0] + m.m[3][0]
+	y := p.X*m.m[0][1] + p.Y*m.m[1][1] + p.Z*m.m[2][1] + m.m[3][1]
+	z := p.X*m.m[0][2] + p.Y*m.m[1][2] + p.Z*m.m[2][2] + m.m[3][2]
+	w := p.X*m.m[0][3] + p.Y*m.m[1][3] + p.Z*m.m[2][3] + m.m[3][3]
 
-	pt := NewPt(x/w, y/w, z/w)
+	pt := &Pt{x / w, y / w, z / w}
 	return pt
 }
 
 func (m *M44) rotateV3(v *V3) *V3 {
-	x := v.x*m.m[0][0] + v.y*m.m[1][0] + v.z*m.m[2][0]
-	y := v.x*m.m[0][1] + v.y*m.m[1][1] + v.z*m.m[2][1]
-	z := v.x*m.m[0][2] + v.y*m.m[1][2] + v.z*m.m[2][2]
+	x := v.X*m.m[0][0] + v.Y*m.m[1][0] + v.Z*m.m[2][0]
+	y := v.X*m.m[0][1] + v.Y*m.m[1][1] + v.Z*m.m[2][1]
+	z := v.X*m.m[0][2] + v.Y*m.m[1][2] + v.Z*m.m[2][2]
 
-	return NewV3(x, y, z)
+	return &V3{x, y, z}
 }
 
 func (m *M44) Translate(v *V3) *M44 {
-	m.m[3][0] = m.m[3][0] + v.x
-	m.m[3][1] = m.m[3][1] + v.y
-	m.m[3][2] = m.m[3][2] + v.z
+	m.m[3][0] = m.m[3][0] + v.X
+	m.m[3][1] = m.m[3][1] + v.Y
+	m.m[3][2] = m.m[3][2] + v.Z
 	return m
 }
 
 func (m *M44) Scale(v *V3) *M44 {
-	m.m[0][0] = m.m[0][0] * v.x
-	m.m[1][1] = m.m[1][1] * v.y
-	m.m[2][2] = m.m[2][2] * v.z
+	m.m[0][0] = m.m[0][0] * v.X
+	m.m[1][1] = m.m[1][1] * v.Y
+	m.m[2][2] = m.m[2][2] * v.Z
 	return m
 }

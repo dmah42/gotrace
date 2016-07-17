@@ -4,9 +4,9 @@ import (
 	"testing"
 )
 
-func TestNewPt(t *testing.T) {
-	p := NewPt(1.0, 2.0, 3.0)
-	if p.x != 1.0 && p.y != 2.0 && p.z != 3.0 {
+func TestPt(t *testing.T) {
+	p := &Pt{1.0, 2.0, 3.0}
+	if p.X != 1.0 && p.Y != 2.0 && p.Z != 3.0 {
 		t.Errorf("want {1.0, 2.0, 3.0}, got %v", *p)
 	}
 }
@@ -17,7 +17,7 @@ func TestPtAdd(t *testing.T) {
 		rhs  *V3
 		want Pt
 	}{
-		{lhs: NewPt(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: Pt{5.0, 7.0, 9.0}},
+		{lhs: &Pt{1.0, 2.0, 3.0}, rhs: &V3{4.0, 5.0, 6.0}, want: Pt{5.0, 7.0, 9.0}},
 	}
 
 	for _, tt := range cases {
@@ -34,7 +34,7 @@ func TestPtSub(t *testing.T) {
 		rhs  *V3
 		want Pt
 	}{
-		{lhs: NewPt(1.0, 2.0, 3.0), rhs: NewV3(4.0, 5.0, 6.0), want: Pt{-3.0, -3.0, -3.0}},
+		{lhs: &Pt{1.0, 2.0, 3.0}, rhs: &V3{4.0, 5.0, 6.0}, want: Pt{-3.0, -3.0, -3.0}},
 	}
 
 	for _, tt := range cases {
@@ -47,11 +47,11 @@ func TestPtSub(t *testing.T) {
 
 func TestPtScale(t *testing.T) {
 	cases := []struct {
-		lhs *Pt
-		f float64
+		lhs  *Pt
+		f    float64
 		want Pt
 	}{
-		{lhs: NewPt(1.0, 2.0, 3.0), f: 0.5, want: Pt{0.5, 1.0, 1.5}},
+		{lhs: &Pt{1.0, 2.0, 3.0}, f: 0.5, want: Pt{0.5, 1.0, 1.5}},
 	}
 
 	for _, tt := range cases {
@@ -67,7 +67,7 @@ func TestPtDelta(t *testing.T) {
 		lhs, rhs *Pt
 		want     V3
 	}{
-		{lhs: NewPt(1.0, 2.0, 3.0), rhs: NewPt(4.0, 5.0, 6.0), want: V3{-3.0, -3.0, -3.0}},
+		{lhs: &Pt{1.0, 2.0, 3.0}, rhs: &Pt{4.0, 5.0, 6.0}, want: V3{-3.0, -3.0, -3.0}},
 	}
 
 	for _, tt := range cases {

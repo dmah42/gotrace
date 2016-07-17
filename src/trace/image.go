@@ -5,12 +5,13 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"math"
 	"os"
 )
 
 type Image [][]Color
 
-const maxColor = 65535
+const maxColor = math.MaxUint16
 
 // Convert a row of uint16s to a byte slice
 func colorToBytes(r [][3]uint16) []byte {
@@ -59,6 +60,10 @@ func normalizeImage(image Image) {
 			image[i][j].Scale(1.0 / max)
 		}
 	}
+}
+
+func (i Image) write(name string) {
+	// TODO: fill this out as per goradiosity.
 }
 
 // Write the given image to a PPM format file of the given name

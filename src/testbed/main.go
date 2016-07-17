@@ -12,8 +12,8 @@ var (
 	triangleColor = trace.Color{0.8, 1, 0}
 	lightColor    = trace.Color{1, 1, 1}
 
-	scene = flag.String("scene", "polysphere", "The scene to render: teapot, polysphere, primitives")
-	width = flag.Uint("width", 400, "The width of the image to render")
+	scene  = flag.String("scene", "polysphere", "The scene to render: teapot, polysphere, primitives")
+	width  = flag.Uint("width", 400, "The width of the image to render")
 	height = flag.Uint("height", 300, "The height of the image to render")
 )
 
@@ -28,8 +28,8 @@ func polySphere(radius float64, divs uint32, o2w *trace.M44, material trace.Mate
 	du := math.Pi / float64(divs)
 	dv := 2 * math.Pi / float64(divs)
 
-	P[0] = *trace.NewPt(0, -radius, 0)
-	N[0] = *trace.NewV3(0, -radius, 0)
+	P[0] = trace.Pt{0, -radius, 0}
+	N[0] = trace.V3{0, -radius, 0}
 
 	var i uint32 = 0
 	var k uint32 = 1
@@ -41,14 +41,14 @@ func polySphere(radius float64, divs uint32, o2w *trace.M44, material trace.Mate
 			x := radius * math.Cos(u) * math.Cos(v)
 			y := radius * math.Sin(u)
 			z := radius * math.Cos(u) * math.Sin(v)
-			P[k] = *trace.NewPt(x, y, z)
-			N[k] = *trace.NewV3(x, y, z)
+			P[k] = trace.Pt{x, y, z}
+			N[k] = trace.V3{x, y, z}
 			v = v + dv
 			k++
 		}
 	}
-	P[k] = *trace.NewPt(0, radius, 0)
-	N[k] = *trace.NewV3(0, radius, 0)
+	P[k] = trace.Pt{0, radius, 0}
+	N[k] = trace.V3{0, radius, 0}
 
 	// polygons
 	npoly := divs * divs
@@ -110,11 +110,12 @@ func main() {
 	c := trace.NewContext(*width, *height)
 
 	o2w := trace.NewM44()
-	o2w.Translate(trace.NewV3(0, 0, -5))
+	o2w.Translate(&trace.V3{0, 0, -5})
+	// TODO: rotate o2w matrix
 
 	m := trace.NewSolidColor(sphereColor)
 
-	switch (*scene) {
+	switch *scene {
 	case "teapot":
 		c.AddPrimitive(trace.NewBezier(o2w, m, teapotVerts, teapotPatches))
 
@@ -122,15 +123,15 @@ func main() {
 		c.AddPrimitive(polySphere(2, 10, o2w, m))
 
 	case "primitives":
-		o2w.Translate(trace.NewV3(-2, 0, -5))
+		o2w.Translate(&trace.V3{-2, 0, -5})
 		c.AddPrimitive(trace.NewSphere(o2w, m))
 
 		o2w = trace.NewM44()
-		o2w.Translate(trace.NewV3(0, 0, -2)).Scale(trace.NewV3(0.2, 0.2, 0.2))
+		o2w.Translate(&trace.V3{0, 0, -2}).Scale(&trace.V3{0.2, 0.2, 0.2})
 		c.AddPrimitive(trace.NewSphere(o2w, trace.NewLight(lightColor)))
 
 		o2w = trace.NewM44()
-		o2w.Translate(trace.NewV3(2, 0, -5))
+		o2w.Translate(&trace.V3{2, 0, -5})
 		c.AddPrimitive(trace.NewTriangle(o2w, trace.NewSolidColor(triangleColor)))
 
 	default:

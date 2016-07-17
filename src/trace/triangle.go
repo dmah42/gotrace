@@ -35,7 +35,7 @@ func (tri *Triangle) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 		return
 	}
 
-	vt := V3Sub(PtDelta(&r.o, Origin), &tri.v[0])
+	vt := V3Sub(PtDelta(&r.o, &Pt{}), &tri.v[0])
 	u = Dot(vt, vp) / det
 
 	hit = u >= 0 && u <= 1
@@ -61,5 +61,5 @@ func (t *Triangle) material() Material {
 }
 
 func (t *Triangle) randomPt() *Pt {
-	return Origin
+	return &Pt{}
 }

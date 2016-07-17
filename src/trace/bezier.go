@@ -36,7 +36,7 @@ func (b *Bezier) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 }
 
 func evalBezierCurve(p []Pt, t float64) *Pt {
-	iT := 1.0-t
+	iT := 1.0 - t
 	b0 := iT * iT * iT
 	b1 := 3 * t * iT * iT
 	b2 := 3 * t * t * iT
@@ -66,7 +66,7 @@ func (b *Bezier) generatePolyMeshes(o2w *M44, m Material, points []Pt, patches [
 
 	for np := range patches {
 		for i := 0; i < len(controlPoints); i++ {
-			controlPoints[i] = points[patches[np][i] - 1]
+			controlPoints[i] = points[patches[np][i]-1]
 		}
 
 		var k uint32 = 0
@@ -81,18 +81,18 @@ func (b *Bezier) generatePolyMeshes(o2w *M44, m Material, points []Pt, patches [
 
 		k = 0
 		for j := 0; j < divs; j++ {
-			for i := 0; i < divs; i++{
+			for i := 0; i < divs; i++ {
 				nverts[k] = 4
-				verts[k*4] = uint32((divs+1)*j+i)
-				verts[k*4+1] = uint32((divs+1)*(j+1)+i)
-				verts[k*4+2] = uint32((divs+1)*(j+1) + (i+1))
-				verts[k*4+3] = uint32((divs+1)*j+(i+1))
+				verts[k*4] = uint32((divs+1)*j + i)
+				verts[k*4+1] = uint32((divs+1)*(j+1) + i)
+				verts[k*4+2] = uint32((divs+1)*(j+1) + (i + 1))
+				verts[k*4+3] = uint32((divs+1)*j + (i + 1))
 				k++
 			}
 		}
 
 		b.p = append(b.p, NewPolyMesh(o2w, m, uint32(len(nverts)), nverts, verts, P, []V3{}))
-	  }
+	}
 }
 
 func (b *Bezier) material() Material {
@@ -100,6 +100,6 @@ func (b *Bezier) material() Material {
 }
 
 func (b *Bezier) randomPt() *Pt {
-	// random point on random polymesh
-	return Origin
+	// TODO: random point on random polymesh
+	return &Pt{}
 }

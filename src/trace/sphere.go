@@ -43,7 +43,7 @@ func (s *Sphere) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	r.t1 = ray.t1
 
 	a := Dot(&r.d, &r.d)
-	l := PtDelta(&r.o, Origin)
+	l := PtDelta(&r.o, &Pt{})
 	b := 2 * Dot(&r.d, l)
 	c := Dot(l, l) - (s.r * s.r)
 
@@ -63,8 +63,8 @@ func (s *Sphere) Intersect(ray *Ray) (hit bool, t, u, v float64) {
 	}
 
 	iPt := PtAdd(&r.o, V3Mul(&r.d, t))
-	theta := math.Acos(-iPt.y)
-	phi := math.Atan2(iPt.z, -iPt.x)
+	theta := math.Acos(-iPt.Y)
+	phi := math.Atan2(iPt.Z, -iPt.X)
 
 	for phi < 0 {
 		phi = phi + 2.0*math.Pi
@@ -81,5 +81,5 @@ func (s *Sphere) material() Material {
 
 func (s *Sphere) randomPt() *Pt {
 	// TODO: pick a point on the surface
-	return s.w2o.transformPt(Origin)
+	return s.w2o.transformPt(&Pt{})
 }

@@ -113,5 +113,5 @@ func (m *PolyMesh) material() Material {
 }
 
 func (m *PolyMesh) randomPt() *Pt {
-	return m.w2o.transformPt(Origin)
+	return m.w2o.transformPt(&Pt{})
 }

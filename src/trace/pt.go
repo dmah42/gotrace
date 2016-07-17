@@ -1,31 +1,25 @@
 package trace
 
-var Origin = &Pt{0, 0, 0}
-
 type Pt struct {
-	x, y, z float64
-}
-
-func NewPt(x, y, z float64) *Pt {
-	return &Pt{x, y, z}
+	X, Y, Z float64
 }
 
 func PtAdd(p *Pt, v *V3) *Pt {
-	return NewPt(p.x+v.x, p.y+v.y, p.z+v.z)
+	return &Pt{p.X + v.X, p.Y + v.Y, p.Z + v.Z}
 }
 
 func PtSub(p *Pt, v *V3) *Pt {
-	return NewPt(p.x-v.x, p.y-v.y, p.z-v.z)
+	return &Pt{p.X - v.X, p.Y - v.Y, p.Z - v.Z}
 }
 
 func PtScale(p *Pt, f float64) *Pt {
-	return NewPt(p.x*f, p.y*f, p.z*f)
+	return &Pt{p.X * f, p.Y * f, p.Z * f}
 }
 
 func PtDelta(lhs, rhs *Pt) *V3 {
-	return NewV3(lhs.x-rhs.x, lhs.y-rhs.y, lhs.z-rhs.z)
+	return &V3{lhs.X - rhs.X, lhs.Y - rhs.Y, lhs.Z - rhs.Z}
 }
 
 func (p *Pt) ToV3() *V3 {
-	return PtDelta(p, Origin)
+	return PtDelta(p, &Pt{})
 }

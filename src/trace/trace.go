@@ -20,8 +20,8 @@ var (
 
 // x and y are coordinates on the image plane
 func primaryRay(x, y float64) *Ray {
-	imgPt := NewPt(x, y, 10)
-	eyePt := Origin
+	imgPt := &Pt{x, y, 10}
+	eyePt := &Pt{}
 
 	return NewRay(eyePt, PtDelta(imgPt, eyePt))
 }
@@ -55,7 +55,7 @@ func trace(r *Ray, prims []Primitive, d uint32) Color {
 	// TODO: reflection/refraction
 	// TODO: lights
 
-	c := Color{minU, minV, 0.5}//prims[hitInx].material().diffuse(minU, minV)
+	c := Color{minU, minV, 0.5} //prims[hitInx].material().diffuse(minU, minV)
 	// fmt.Printf("  %v\n", c)
 	return c
 }
@@ -65,7 +65,7 @@ func Render(ctx *Context) Image {
 	image := makeImage(ctx.imgW, ctx.imgH)
 
 	startTime := time.Now()
-	rayO := ctx.camera.c2w.transformPt(Origin)
+	rayO := ctx.camera.c2w.transformPt(&Pt{})
 	// TODO: multithread this - tiles?
 	for y := range image {
 		for x := range image[y] {
@@ -75,10 +75,10 @@ func Render(ctx *Context) Image {
 			yy := (1.0 - 2.0*(float64(y)+0.5)/float64(ctx.imgH)) * ctx.camera.angle
 
 			//fmt.Printf("  %.3f %.3f\n", xx, yy)
-			//camPos := ctx.camera.c2w.transformPt(NewPt(xx, yy, -1))
+			//camPos := ctx.camera.c2w.transformPt(&Pt{xx, yy, -1)}
 			//			fmt.Printf("  %+v\n", camPos)
 			//rayD := PtDelta(camPos, rayO)
-			rayD := ctx.camera.c2w.rotateV3(NewV3(xx, yy, -1))
+			rayD := ctx.camera.c2w.rotateV3(&V3{xx, yy, -1})
 			ray := NewRay(rayO, rayD)
 			renderStats.primaryRay++
 
@@ -87,7 +87,7 @@ func Render(ctx *Context) Image {
 		}
 	}
 	renderTime = time.Since(startTime)
-	fmt.Printf("\n");
+	fmt.Printf("\n")
 	log.Printf("Stats: %+v\n", renderStats)
 	log.Printf("Time: %s\n", renderTime)
 	return image
